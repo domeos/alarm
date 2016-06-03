@@ -1,0 +1,24 @@
+{
+    "debug": true,
+    "database": {{ default .Env.DATABASE "\"root:root@tcp(127.0.0.1:3306)/domeos?loc=Local&parseTime=true\"" }},
+    "maxIdle": {{ default .Env.MAXIDLE "100" }},
+    "http": {
+        "enabled": {{ default .Env.HTTP_ENABLED "true" }},
+        "listen": {{ default .Env.HTTP_LISTEN "\"0.0.0.0:9912\"" }}
+    },
+    "queue": {
+        "sms": {{ default .Env.QUEUE_SMS "\"/sms\"" }},
+        "mail": {{ default .Env.QUEUE_MAIL "\"/mail\"" }}
+    },
+    "redis": {
+        "addr": {{ default .Env.REDIS_ADDR "\"127.0.0.1:6379\"" }},
+        "maxIdle": {{ default .Env.REDIS_MAXIDLE "5" }},
+        "highQueues": {{ default .Env.REDIS_HIGHQUEUES "[\"event:p0\",\"event:p1\",\"event:p2\",\"event:p3\",\"event:p4\",\"event:p5\"]" }},
+        "lowQueues": {{ default .Env.REDIS_LOWQUEUES "[\"event:p6\"]" }},
+        "userSmsQueue": {{ default .Env.REDIS_USERSMSQUEUE "\"/queue/user/sms\"" }},
+        "userMailQueue": {{ default .Env.REDIS_USERMAILQUEUE "\"/queue/user/mail\"" }}
+    },
+    "api": {
+        "domeos": {{ default .Env.API_DOMEOS "\"http://domeos.example.com\"" }}
+    }
+}
