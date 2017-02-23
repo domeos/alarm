@@ -1,7 +1,7 @@
 domeos/alarm
 ============
 
-## Notice
+# Notice
 
 domeos/alarm模块是以open-falcon原生alarm模块为基础，为适应DomeOS监控报警需求而设计修改的，包名已修改为`github.com/domeos/alarm`
 
@@ -26,7 +26,7 @@ domeos/alarm模块是以open-falcon原生alarm模块为基础，为适应DomeOS�
 # set $GOPATH and $GOROOT
 mkdir -p $GOPATH/src/github.com/domeos
 cd $GOPATH/src/github.com/domeos
-git clone https://github.com/domeos/alarm.git
+git clone http://code.sohuno.com/domeos/alarm.git
 cd alarm
 go get ./...
 ./control build
@@ -52,38 +52,15 @@ sudo docker build -t="domeos/alarm:latest" ./docker/
 
 启动docker容器：
 ```bash
-sudo docker run -d --restart=always \
-    -p <_alarm_http_port>:9912 \
-    -e DATABASE="\"<_domeos_db_user>:<_domeos_db_passwd>@tcp(<_domeos_db_addr>)/domeos?loc=Local&parseTime=true\"" \
-    -e REDIS_ADDR="\"<_redis>\"" \
-    -e API_DOMEOS="\"<_domeos_server>\"" \
-    --name alarm \
-    pub.domeos.org/domeos/alarm:1.0
+sudo docker run -d \
+--net=host \
+-e DATABASE=<domeos database address> \
+-e REDIS_ADDR=<redis address> \
+-e API_DOMEOS=<domeos server address> \
+--name alarm \
+domeos/alarm:latest
 ```
 
-参数说明：
+DomeOS仓库中domeos/alarm对应版本：
+pub.domeos.org/domeos/alarm:1.0
 
-- _alarm_http_port: alarm服务http端口，主要用于状态检测、调试等。
-- _domeos_db_user: DomeOS中MySQL数据库的用户名。
-- _domeos_db_passwd: DomeOS中MySQL数据库的密码。
-- _domeos_db_addr: DomeOS中MySQL数据库的地址，格式为IP:Port。
-- _redis: 用于报警的redis服务地址，格式为IP:Port。
-- _domeos_server: DomeOS的server地址。
-
-样例：
-
-```bash
-sudo docker run -d --restart=always \
-    -p 9912:9912 \
-    -e DATABASE="\"root:root@tcp(10.16.42.199:3306)/domeos?loc=Local&parseTime=true\"" \
-    -e REDIS_ADDR="\"10.16.42.199:6379\"" \
-    -e API_DOMEOS="\"http://domeos.example.com\"" \
-    --name alarm \
-    pub.domeos.org/domeos/alarm:1.0
-```
-
-验证：
-
-通过curl -s localhost:<_alarm_http_port>/health命令查看运行状态，若运行正常将返回ok。
-
-DomeOS仓库中domeos/alarm对应版本：pub.domeos.org/domeos/alarm:1.0
